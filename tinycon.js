@@ -202,15 +202,15 @@
     context.lineWidth = .25*r;
     context.stroke();
 
-    // label
-    context.fillStyle = options.color;
-    context.textAlign = "center";
-    context.textBaseline = "top";
+  /** label
+    * context.fillStyle = options.color;
+    * context.textAlign = "center";
+    * context.textBaseline = "top";
 
-    // unfortunately webkit/mozilla are a pixel different in text positioning
-    context.fillText(label, r === 2 ? 21 : 5, browser.mozilla ? 9*r : 8*r);
-  };
-
+    *  unfortunately webkit/mozilla are a pixel different in text positioning
+    * context.fillText(label, r === 2 ? 21 : 5, browser.mozilla ? 9*r : 8*r);
+    */
+ };
   var refreshFavicon = function(){
     // check support
     if (!getCanvas().getContext) return;
@@ -262,8 +262,7 @@
   };
 
   Tinycon.setBubble = function(label, color) {
-    //label = label || '';
-    label =  '';
+    label = label || '';
     drawFavicon(label, color);
     return this;
   };
