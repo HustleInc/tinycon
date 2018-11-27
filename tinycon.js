@@ -17,10 +17,11 @@
   var r = Math.ceil(window.devicePixelRatio) || 1;
   var size = 16 * r;
   var defaults = {
-    width: 7,
-    height: 9,
-    font: 10 * r + 'px arial',
-    color: '#ffffff',
+    centerX: 0.75 * size,
+    centerY: 0.75 * size,
+    radius: 4*r,
+    font: 10 + 'px arial',
+    color: '#F03D25',
     background: '#F03D25',
     fallback: true,
     crossOrigin: true,
@@ -176,14 +177,12 @@
     // bubble needs to be larger for double digits
     var len = (label + '').length-1;
 
-    var width = options.width * r + (6 * r * len),
-      height = options.height * r;
+    var centerX = options.centerX - (len * 0.5 * r),
+        centerY = options.centerY - (len * 0.5 * r),
+        radius = options.radius + (len * 0.5 * r);
 
-    var top = size - height,
-            left = size - width - r,
-            bottom = 16 * r,
-            right = 16 * r,
-            radius = 2 * r;
+    var startAngle = 0 * Math.PI, 
+        endAngle = 2 * Math.PI;
 
     // webkit seems to render fonts lighter than firefox
     context.font = (browser.webkit ? 'bold ' : '') + options.font;
@@ -193,31 +192,23 @@
 
     // bubble
     context.beginPath();
-    context.moveTo(left + radius, top);
-    context.quadraticCurveTo(left, top, left, top + radius);
-    context.lineTo(left, bottom - radius);
-    context.quadraticCurveTo(left, bottom, left + radius, bottom);
-    context.lineTo(right - radius, bottom);
-    context.quadraticCurveTo(right, bottom, right, bottom - radius);
-    context.lineTo(right, top + radius);
-    context.quadraticCurveTo(right, top, right - radius, top);
-    context.closePath();
+    context.arc(centerX, centerY, radius, startAngle, endAngle, false);
     context.fill();
 
     // bottom shadow
     context.beginPath();
     context.strokeStyle = "rgba(0,0,0,0.3)";
-    context.moveTo(left + radius / 2.0, bottom);
-    context.lineTo(right - radius / 2.0, bottom);
+    context.arc(centerX, centerY, radius, startAngle, endAngle, false);
+    context.lineWidth = .25*r;
     context.stroke();
 
     // label
     context.fillStyle = options.color;
-    context.textAlign = "right";
+    context.textAlign = "center";
     context.textBaseline = "top";
 
     // unfortunately webkit/mozilla are a pixel different in text positioning
-    context.fillText(label, r === 2 ? 29 : 15, browser.mozilla ? 7*r : 6*r);
+    context.fillText(label, r === 2 ? 21 : 5, browser.mozilla ? 9*r : 8*r);
   };
 
   var refreshFavicon = function(){
@@ -271,7 +262,8 @@
   };
 
   Tinycon.setBubble = function(label, color) {
-    label = label || '';
+    //label = label || '';
+    label =  '';
     drawFavicon(label, color);
     return this;
   };
